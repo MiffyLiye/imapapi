@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+
+  redis:
+    image: redis:6
+    restart: always
+
+  imapapi:
+    image: miffyliye/imapapi:v1.3.0
+    restart: always
+    links: [redis]
+    depends_on: [redis]
+    environment:
+      REDIS_URL: redis://redis:6379
+      API_HOST: "0.0.0.0"
+      API_PORT: "8080"
+      LOG_LEVEL: info
+    entrypoint:
+      - node
+      - server.js
+    ports: 
+      - "8080:8080"
+
